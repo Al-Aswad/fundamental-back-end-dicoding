@@ -1,3 +1,5 @@
+const ClientError = require("../../exeptions/ClientError");
+
 class NotesHandler {
     constructor(service, validator) {
         this._service = service;
@@ -93,7 +95,7 @@ class NotesHandler {
 
     putNoteByIdHandler(request, h) {
         try {
-
+            this._validator.validateNotePayload(request.payload);
             const { id } = request.params;
 
             this._service.editNoteById(id, request.payload);
@@ -109,6 +111,7 @@ class NotesHandler {
                     message: error.message,
                 });
                 response.code(error.statusCode);
+                console.error(error.message);
                 return response;
             }
 
