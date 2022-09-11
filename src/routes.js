@@ -1,9 +1,10 @@
+const { handler } = require('@hapi/hapi/lib/cors');
 const { deleteNoteByIdHandler } = require('./handler');
 const { editNoteByIdHandler } = require('./handler');
 const { getNoteByIdHandler } = require('./handler');
 const { addNoteHandler, getAllNotesHandler } = require('./handler');
 
-const routes = [
+const routes =(handler)=> [
   {
     method: 'POST',
     path: '/notes',
