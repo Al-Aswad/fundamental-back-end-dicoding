@@ -130,8 +130,8 @@ class NotesHandler {
     async deleteNoteByIdHandler(request, h) {
         try {
             const { id } = request.params;
-
             await this._service.deleteNoteById(id);
+
             return {
                 status: 'success',
                 message: 'Catatan berhasil dihapus',
