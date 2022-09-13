@@ -1,15 +1,17 @@
 {
     "env": {
-        "es2021": true,
-        "node": true
+        "node": true,
+        "es2021": true
     },
     "extends": [
         "airbnb-base"
     ],
     "parserOptions": {
-        "ecmaVersion": 2020
+        "ecmaVersion": "latest"
     },
     "rules": {
-        "no-console": "off",
+        "linebreak-style": 0,
+        "no-console": 0,
+        "indent": ["error", 4]
     }
 }

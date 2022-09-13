@@ -1,4 +1,4 @@
-const routes =(handler)=>[
+const routes = (handler) => [
     {
         method: 'POST',
         path: '/notes',
@@ -23,7 +23,7 @@ const routes =(handler)=>[
         method: 'DELETE',
         path: '/notes/{id}',
         handler: handler.deleteNoteByIdHandler,
-    }
+    },
 ];
 
 module.exports = routes;

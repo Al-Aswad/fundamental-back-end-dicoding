@@ -1,4 +1,5 @@
-const ClientError = require("../../exeptions/ClientError");
+/* eslint-disable no-underscore-dangle */
+const ClientError = require('../../exeptions/ClientError');
 
 class NotesHandler {
     constructor(service, validator) {
@@ -24,7 +25,7 @@ class NotesHandler {
                 message: 'Catatan berhasil ditambahkan',
                 data: {
                     noteId,
-                }
+                },
             });
 
             response.code(201);
@@ -56,8 +57,8 @@ class NotesHandler {
             status: 'success',
             data: {
                 notes,
-            }
-        }
+            },
+        };
     }
 
     async getNoteByIdHandler(request, h) {
@@ -70,8 +71,8 @@ class NotesHandler {
                 status: 'success',
                 data: {
                     note,
-                }
-            }
+                },
+            };
         } catch (error) {
             if (error instanceof ClientError) {
                 const response = h.response({
@@ -103,7 +104,7 @@ class NotesHandler {
             return {
                 status: 'success',
                 message: 'Catatan berhasil diperbarui',
-            }
+            };
         } catch (error) {
             if (error instanceof ClientError) {
                 const response = h.response({
@@ -128,14 +129,13 @@ class NotesHandler {
 
     async deleteNoteByIdHandler(request, h) {
         try {
-
             const { id } = request.params;
 
             await this._service.deleteNoteById(id);
             return {
                 status: 'success',
                 message: 'Catatan berhasil dihapus',
-            }
+            };
         } catch (error) {
             if (error instanceof ClientError) {
                 const response = h.response({

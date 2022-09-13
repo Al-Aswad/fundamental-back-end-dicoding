@@ -1,72 +1,73 @@
+/* eslint-disable no-underscore-dangle */
 const { nanoid } = require('nanoid');
 const InvariantError = require('../../exeptions/InvariantError');
 const NotFoundError = require('../../exeptions/NotFoundError');
 
 class NotesService {
-  constructor() {
-    this._notes = [];
-  }
-
-  addNote({ title, body, tags }) {
-    const id = nanoid(16);
-
-    const createdAt = new Date().toISOString();
-    const updatedAt = createdAt;
-
-    const newNote = {
-      title, body, tags, id, createdAt, updatedAt,
-    };
-
-    this._notes.push(newNote);
-
-    const isSuccess = this._notes.filter((note) => note.id === id).length > 0;
-
-    if (!isSuccess) {
-      throw new InvariantError('Catatan gagal ditambahkan');
+    constructor() {
+        this._notes = [];
     }
 
-    return id;
-  }
+    addNote({ title, body, tags }) {
+        const id = nanoid(16);
 
-  getNotes() {
-    return this._notes;
-  }
+        const createdAt = new Date().toISOString();
+        const updatedAt = createdAt;
 
-  getNoteById(id) {
-    const note = this._notes.filter((note) => note.id === id)[0];
+        const newNote = {
+            title, body, tags, id, createdAt, updatedAt,
+        };
 
-    if (!note) {
-      throw new NotFoundError('Catatan tidak ditemukan');
+        this._notes.push(newNote);
+
+        const isSuccess = this._notes.filter((note) => note.id === id).length > 0;
+
+        if (!isSuccess) {
+            throw new InvariantError('Catatan gagal ditambahkan');
+        }
+
+        return id;
     }
 
-    return note;
-  }
-
-  editNoteById(id, { title, body, tags }) {
-    const index = this._notes.findIndex((note) => note.id === id);
-
-    if (index===-1) {
-      throw new NotFoundError('Gagal memperbarui catatan. Id tidak ditemukan');
+    getNotes() {
+        return this._notes;
     }
 
-    const updatedAt = new Date().toISOString();
+    getNoteById(id) {
+        const note = this._notes.filter((n) => n.id === id)[0];
 
-    this._notes[index] = {
-      ...this._notes[index],
-      title,
-      body,
-      tags,
-      updatedAt,
-    };
-  }
+        if (!note) {
+            throw new NotFoundError('Catatan tidak ditemukan');
+        }
 
-  deleteNoteById(id) {
-    const index = this._notes.findIndex((note) => note.id === id);
-    if (index === -1) {
-      throw new NotFoundError('Catatan gagal dihapus. Id tidak ditemukan');
+        return note;
     }
-    this._notes.splice(index, 1);
-  }
+
+    editNoteById(id, { title, body, tags }) {
+        const index = this._notes.findIndex((note) => note.id === id);
+
+        if (index === -1) {
+            throw new NotFoundError('Gagal memperbarui catatan. Id tidak ditemukan');
+        }
+
+        const updatedAt = new Date().toISOString();
+
+        this._notes[index] = {
+            ...this._notes[index],
+            title,
+            body,
+            tags,
+            updatedAt,
+        };
+    }
+
+    deleteNoteById(id) {
+        const index = this._notes.findIndex((note) => note.id === id);
+        if (index === -1) {
+            throw new NotFoundError('Catatan gagal dihapus. Id tidak ditemukan');
+        }
+        this._notes.splice(index, 1);
+    }
 }
 
 module.exports = NotesService;
