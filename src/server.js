@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 require('dotenv').config();
 const Hapi = require('@hapi/hapi');
 const Jwt = require('@hapi/jwt');
@@ -18,6 +19,10 @@ const AuthenticationsValidator = require('./validator/authentications');
 const collaborations = require('./api/collaborations');
 const CollaborationsValidator = require('./validator/collaborations');
 const CollaboraionsService = require('./services/postgres/CollaborationsService');
+// exports
+const _exports = require('./api/exports');
+const ExportService = require('./services/rabbitmq/ProducerService');
+const ExportValidator = require('./validator/exports');
 
 const init = async () => {
     const collaborationService = new CollaboraionsService();
@@ -88,6 +93,13 @@ const init = async () => {
                 collaborationService,
                 notesService,
                 validator: CollaborationsValidator,
+            },
+        },
+        {
+            plugin: _exports,
+            options: {
+                service: ExportService,
+                validator: ExportValidator,
             },
         },
     ]);
