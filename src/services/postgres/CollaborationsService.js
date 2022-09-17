@@ -4,8 +4,10 @@ const { Pool } = require('pg');
 const InvariantError = require('../../exeptions/InvariantError');
 
 class CollaboraionsService {
-    constructor() {
+    constructor(cacheService) {
         this._pool = new Pool();
+
+        this._cacheService = cacheService;
     }
 
     async addCollaboration(noteId, userId) {
@@ -22,6 +24,7 @@ class CollaboraionsService {
             throw new Error('Kolaborasi gagal dihapus');
         }
 
+        await this._cacheService.delete(`notes:${userId}`);
         return result.rows[0].id;
     }
 
@@ -36,6 +39,8 @@ class CollaboraionsService {
         if (!result.rows[0].id) {
             throw new InvariantError('Kolaborasi gagal dihapus');
         }
+
+        await this._cacheService.delete(`notes:${userId}`);
     }
 
     async verifyCollaborator(noteId, userId) {
