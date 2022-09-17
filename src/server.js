@@ -2,33 +2,46 @@
 require('dotenv').config();
 const Hapi = require('@hapi/hapi');
 const Jwt = require('@hapi/jwt');
+const path = require('path');
+const Inert = require('@hapi/inert');
+
 // notes
 const notes = require('./api/notes');
 const NotesService = require('./services/postgres/NotesService');
 const NotesValidator = require('./validator/notes');
+
 // users
 const users = require('./api/users');
 const UserService = require('./services/postgres/UserServices');
 const UsersValidator = require('./validator/users');
+
 // authentications
 const authentications = require('./api/authentications');
 const AuthtenticationsService = require('./services/postgres/AuthtenticationsService');
 const TokenManager = require('./tokenize/TokenManager');
 const AuthenticationsValidator = require('./validator/authentications');
+
 // collaborations
 const collaborations = require('./api/collaborations');
 const CollaborationsValidator = require('./validator/collaborations');
 const CollaboraionsService = require('./services/postgres/CollaborationsService');
+
 // exports
 const _exports = require('./api/exports');
 const ExportService = require('./services/rabbitmq/ProducerService');
 const ExportValidator = require('./validator/exports');
+
+// uploads
+const uploads = require('./api/uploads');
+const StorageService = require('./services/storage/StorageService');
+const UploadsValidator = require('./validator/uploads');
 
 const init = async () => {
     const collaborationService = new CollaboraionsService();
     const notesService = new NotesService(collaborationService);
     const userService = new UserService();
     const authenticationService = new AuthtenticationsService();
+    const storageService = new StorageService(path.resolve(__dirname, 'api/uploads/file/images'));
 
     const server = Hapi.server({
         port: process.env.PORT,
@@ -43,6 +56,9 @@ const init = async () => {
     await server.register([
         {
             plugin: Jwt,
+        },
+        {
+            plugin: Inert,
         },
     ]);
 
@@ -100,6 +116,13 @@ const init = async () => {
             options: {
                 service: ExportService,
                 validator: ExportValidator,
+            },
+        },
+        {
+            plugin: uploads,
+            options: {
+                service: storageService,
+                validator: UploadsValidator,
             },
         },
     ]);
