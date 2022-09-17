@@ -2,7 +2,6 @@
 require('dotenv').config();
 const Hapi = require('@hapi/hapi');
 const Jwt = require('@hapi/jwt');
-const path = require('path');
 const Inert = require('@hapi/inert');
 
 // notes
@@ -41,7 +40,6 @@ const init = async () => {
     const notesService = new NotesService(collaborationService);
     const userService = new UserService();
     const authenticationService = new AuthtenticationsService();
-    // const storageService = new StorageService(path.resolve(__dirname, 'api/uploads/file/images'));
     const storageService = new StorageService();
 
     const server = Hapi.server({
